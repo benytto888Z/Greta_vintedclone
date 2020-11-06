@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Categorie;
 use App\Form\ArticleFormType;
 use App\Form\CategorieFormType;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,16 +16,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminArticleController extends AbstractController
 {
     /**
-     * @Route("/admin/article", name="admin_article")
+     * @Route("/admin/article", name="admin_affichage_articles")
      */
-    public function index(): Response
+    public function index(ArticleRepository $repo): Response
     {
-        return $this->render('admin/admin_article/index.html.twig', [
-            'controller_name' => 'AdminArticleController',
-        ]);
+        $admin = $this->getUser();
+        $articles = $repo->findAll();
+        return $this->render('admin/admin_article/affichagearticles.html.twig',compact('articles','admin'));
     }
 
      /**
+      *@Route("admin/article/{id}", name="admin_article_edit", methods="GET|POST")
      * @Route("/admin/article/ajout", name="admin_article_ajout")
      */
     public function ajouterArticle(Article $article=null, Request $request, EntityManagerInterface $em): Response
@@ -38,12 +40,20 @@ class AdminArticleController extends AbstractController
             $article->setUser($user);
         }
 
+        //variable pour savoir si on est en création ou modif
+
+        $modif = $article->getId() !== null;
+
         $form = $this->createForm(ArticleFormType::class,$article);
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()){
             $em->persist($article);
             $em->flush();
+
+            $this->addFlash('message', $modif ? 'Article modifié avec succès' : 'Article ajouté avec succès');
+
+            return $this->redirectToRoute('articles');
         }
 
         return $this->render('admin/admin_article/ajoutarticle.html.twig',['formulaireArticle'=>$form->createView()]);

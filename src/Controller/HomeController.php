@@ -22,7 +22,19 @@ class HomeController extends AbstractController
      */
     public function articles(ArticleRepository $repo): Response
     {
-        $articles = $repo->findBy(['actif'=>1]);
+        //$articles = $repo->findBy([]);
+       // $articles = $repo->findAll();
+       $articles = $repo->findBy(['actif'=>1]);
         return $this->render('home/articles.html.twig',compact('articles'));
     }
+
+    /**
+     * @Route("/article/{slug}", name="article_details")
+     */
+
+     public function articleDetails(ArticleRepository $repo, $slug){
+        $user = $this->getUser();
+        $article = $repo->findOneBy(['slug'=>$slug]);
+        return $this->render('home/articledetails.html.twig',compact('article','user'));
+     }
 }

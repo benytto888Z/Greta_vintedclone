@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ajouter une categorie{% endblock %}
+
+{% block body %}
+  <h1>Liste des article côté admin</h1>
+
+      {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Liste des articles</h3>
+                        <a href="{{path('admin_article_ajout')}}" class="btn btn-primary float-right">Ajouter</a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date création</th>
+                                <th>Date maj</th>
+                                <th>Titre</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if articles | length < 1 %}
+                            <h3 class="text-warning">Aucun article enregistré</h3>
+                            {% else %}
+                            {% for article in articles %}
+                                <tr>
+                                    <td>{{ article.id }}</td>
+                                    <td>{{ article.createdAt | date('d/m/Y,H:i:s',"Europe/Paris")}}</td>
+                                    <td>{{ article.updatedAt | date('d/m/Y,H:i:s',"Europe/Paris")}}</td>
+                                    <td>{{ article.titre }}</td>
+                                    <td>
+                                        {{ article.description | slice(0,30) | raw}}...
+
+
+                                        <hr>
+                                        {% for cat in article.categorie  %}
+                                            <span class="badge badge-info">{{cat.nom}}</span>
+                                         {% endfor %}
+                                    </td>
+                                    <td>
+                                        <img src="{{ asset('img/'~ article.image) }}"  width="100" alt="{{article.slug}}">
+                                    </td>
+                                    <td>
+
+                                        {{ article.actif ? '<span class="badge badge-success">Publié</span>' : '<span class="badge badge-danger">Non publié</span>'  }}
+
+                                    </td>
+                                    <td>
+
+                                        <a href="{{path('admin_article_edit',{'id':article.id})}}" class="btn btn-warning">Editer</a>
+                                    {#
+                                        <form method="POST" action="{{path('admin_article_delete',{'id':article.id})}}"
+                                              onSubmit ="return confirm('Confirmer la suppression ?')" style="display:inline-block">
+                                            <input type="hidden" name="_method" value="SUP">
+                                            <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ article.id)}}">
+                                            <input type="submit" class="btn btn-danger" value="Delete">
+                                        </form>
+                                    #}
+
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            {% endif %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                               <th>ID</th>
+                                <th>Date création</th>
+                                <th>Date maj</th>
+                                <th>Titre</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+ 
+{% endblock %}
