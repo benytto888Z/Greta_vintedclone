@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminArticleController extends AbstractController
 {
     /**
-     * @Route("/admin/article", name="admin_admin_article")
+     * @Route("/admin/article", name="admin_article")
      */
     public function index(): Response
     {
@@ -24,7 +24,7 @@ class AdminArticleController extends AbstractController
 
 
     /**
-     * @Route("/admin/categorie/ajout", name="categorie_ajout")
+     * @Route("/admin/categorie/ajout", name="admin_categorie_ajout")
      */
     public function ajouterCategorie(Categorie $categorie=null, Request $request, EntityManagerInterface $em): Response
     {
