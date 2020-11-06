@@ -36,7 +36,11 @@ class Categorie
      * @ORM\ManyToMany(targetEntity=Article::class, mappedBy="categorie")
      */
     private $articles;
+    
+    public function __toString(){
 
+        return $this->nom;
+    }
     public function __construct()
     {
         $this->articles = new ArrayCollection();

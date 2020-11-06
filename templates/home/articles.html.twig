@@ -1,8 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}liste des articles{% endblock %}
+{% block title %}Articles en vente{% endblock %}
 
 {% block body %}
-  <h1>Liste des articles disponibles</h1>
-  
+
+  <h3>Liste des articles disponibles</h3>
+
+   <section class="">
+        <div class="container">
+            {% if articles | length < 1 %}
+                <p>Aucun article</p>
+            {% else %}
+               {% for article in articles %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="single-post">
+                                <img class="img-fluid" width="300" src="{{asset('img/'~ article.image)}}" alt="{{ article.slug }}">
+                                <ul class="tags">
+                                    {% for cat in article.categorie %}
+                                    <li><a href="#">- {{ cat.nom}}&nbsp; </a> </li>
+                                    {% endfor %}
+                                </ul>
+                               {# <a href="{{ path('article_details',{'slug':article.slug}) }}">
+                                    <h1>
+                                       {{article.titre}}
+                                    </h1>
+                                </a>#}
+                                <p>
+                                    {{ article.description | slice(0,30) | raw }}...
+                                  {#  <h5><a href="{{ path('article_details',{'slug':article.slug}) }}" class="badge badge-secondary" >Voir le détail</a></h5>#}
+                                </p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}

@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
@@ -19,8 +20,9 @@ class HomeController extends AbstractController
      /**
      * @Route("/articles", name="articles")
      */
-    public function articles(): Response
+    public function articles(ArticleRepository $repo): Response
     {
-        return $this->render('home/articles.html.twig');
+        $articles = $repo->findBy(['actif'=>1]);
+        return $this->render('home/articles.html.twig',compact('articles'));
     }
 }

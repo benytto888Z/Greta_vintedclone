@@ -3,7 +3,15 @@
 {% block title %}ajouter une categorie{% endblock %}
 
 {% block body %}
-  <h1>Ajouter une categorie</h1>
+  <h1 class="text-center">Ajouter un Article</h1>
+  <div class="container">
+   <div class="row justify-content-center">
+    <div class="col-6">
+      {{ form(formulaireArticle) }}
+  </div>
+  </div>
+  </div>
+ 
 
-  {{ form(formulaireArticle) }}
+ 
 {% endblock %}

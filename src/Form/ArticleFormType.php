@@ -10,6 +10,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArticleFormType extends AbstractType
@@ -24,7 +26,10 @@ class ArticleFormType extends AbstractType
             //->add('created_at')
             //->add('updated_at')
             ->add('image',TextType::class)
-           //->add('actif')
+            ->add('actif',CheckboxType::class,[
+                'label'=>'Publier',
+                'required'=>false
+            ])
            // ->add('user')
             ->add('categorie',EntityType::class,[
                 'class'=>Categorie::class,

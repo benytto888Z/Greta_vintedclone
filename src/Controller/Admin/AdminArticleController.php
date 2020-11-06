@@ -29,8 +29,13 @@ class AdminArticleController extends AbstractController
      */
     public function ajouterArticle(Article $article=null, Request $request, EntityManagerInterface $em): Response
     {
+
+      //  dd($this->getUser());
+        $user = $this->getUser();
+
         if(!$article){
             $article = new article();
+            $article->setUser($user);
         }
 
         $form = $this->createForm(ArticleFormType::class,$article);
