@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Article;
 use App\Entity\Categorie;
+use App\Form\ArticleFormType;
 use App\Form\CategorieFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +22,26 @@ class AdminArticleController extends AbstractController
         return $this->render('admin/admin_article/index.html.twig', [
             'controller_name' => 'AdminArticleController',
         ]);
+    }
+
+     /**
+     * @Route("/admin/article/ajout", name="admin_article_ajout")
+     */
+    public function ajouterArticle(Article $article=null, Request $request, EntityManagerInterface $em): Response
+    {
+        if(!$article){
+            $article = new article();
+        }
+
+        $form = $this->createForm(ArticleFormType::class,$article);
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($article);
+            $em->flush();
+        }
+
+        return $this->render('admin/admin_article/ajoutarticle.html.twig',['formulaireArticle'=>$form->createView()]);
     }
 
 
