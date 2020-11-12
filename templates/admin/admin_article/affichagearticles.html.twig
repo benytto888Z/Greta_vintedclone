@@ -67,14 +67,14 @@
                                     <td>
 
                                         <a href="{{path('admin_article_edit',{'id':article.id})}}" class="btn btn-warning">Editer</a>
-                                    {#
+                                    
                                         <form method="POST" action="{{path('admin_article_delete',{'id':article.id})}}"
                                               onSubmit ="return confirm('Confirmer la suppression ?')" style="display:inline-block">
                                             <input type="hidden" name="_method" value="SUP">
                                             <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ article.id)}}">
                                             <input type="submit" class="btn btn-danger" value="Delete">
                                         </form>
-                                    #}
+                                    
 
 
                                     </td>
