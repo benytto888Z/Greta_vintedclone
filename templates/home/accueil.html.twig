@@ -3,6 +3,15 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
+
+    {% for msgregister in app.flashes('msgRegister') %}
+        <div class="alert alert-success" role="alert">
+            {{ msgregister }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
   
    <div class="jumbotron">
     <h1>Bienvenu sur la boutique Vinted Clone</h1>

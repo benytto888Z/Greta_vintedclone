@@ -12,13 +12,30 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
+        {{ form_row(registrationForm.email, {
+          "attr":{"placeholder":"Saisir votre email",
+           "class":"bg-dark text-white"}
         }) }}
+        {{ form_row(registrationForm.password, {
+            label: 'Mot de passe',
+             "attr":{"placeholder":"Saisir votre mot de passe",
+           "class":"bg-dark text-white"}
+        }) }}
+
+        {{ form_row(registrationForm.verifyPassword, {
+            label: 'Confirmer le  Mot de passe',
+             "attr":{"placeholder":"Confirmer le mot de passe",
+           "class":"bg-dark text-white"}
+        }) }}
+
+       {#
         {{ form_row(registrationForm.agreeTerms,{
             label:'Veuillez accepter nos termes'
         }) }}
+       
+       #}
+
+        {{ form_widget(registrationForm) }}
 
         <button type="submit" class="btn btn-primary">S'Inscrire</button>
     {{ form_end(registrationForm) }}

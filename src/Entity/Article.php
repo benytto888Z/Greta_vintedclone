@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
@@ -22,11 +23,13 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\Length(min=3,max=20,minMessage="Le titre doit faire au moins 3 caractères",maxMessage="Le titre doit faire moins de 20 caractères")
      */
     private $titre;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(min=10,max=100,minMessage="La description doit faire au moins 10 caractères",maxMessage="La description doit faire moins de 100 caractères")
      */
     private $description;
 
@@ -38,6 +41,7 @@ class Article
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Range(min=0.1,max=500, minMessage ="Le prix doit être superieur à 0.1", maxMessage="Le prix doit être inferieur à 500")
      */
     private $prix;
 
@@ -140,30 +144,29 @@ class Article
         return $this->created_at;
     }
 
-/*
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
+    /*
+        public function setCreatedAt(\DateTimeInterface $created_at): self
+        {
+            $this->created_at = $created_at;
 
-        return $this;
-    }
-*/
-
+            return $this;
+        }
+    */
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
     }
 
-/*
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
+    /*
+        public function setUpdatedAt(\DateTimeInterface $updated_at): self
+        {
+            $this->updated_at = $updated_at;
 
-        return $this;
-    }
+            return $this;
+        }
 
-  */  
+      */
 
     public function getImage(): ?string
     {

@@ -17,7 +17,14 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+
         $builder
+         ->add('email')
+         ->add('password',PasswordType::class)
+         ->add('verifyPassword',PasswordType::class)
+         ;
+       /* $builder
             ->add('email', EmailType::class, [
                 'label' => 'Addresse Email',
             ])
@@ -47,13 +54,17 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-        ;
+            ->add('verifyPassword', PasswordType::class)
+        ;*/
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }

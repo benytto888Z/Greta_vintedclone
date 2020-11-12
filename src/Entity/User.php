@@ -8,10 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="Cet utilisateur existe déjà")
  */
 class User implements UserInterface
 {
@@ -35,8 +36,15 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
      */
     private $password;
+
+    /**
+     * @Assert\NotBlank(message="Le champ confirmation mot de passe ne peut être vide")
+     * @Assert\EqualTo(propertyPath="password",message="Les mots de passe ne correspondent pas")
+     */
+    private $verifyPassword;
 
     /**
      * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user", orphanRemoval=true)
@@ -97,14 +105,29 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getVerifyPassword(): ?string
+    {
+        return $this->verifyPassword;
+    }
+
+    public function setVerifyPassword(string $verifyPassword): self
+    {
+        $this->verifyPassword = $verifyPassword;
 
         return $this;
     }
