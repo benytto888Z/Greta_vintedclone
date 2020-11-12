@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Categorie;
+use App\Entity\User;
 use App\Form\ArticleFormType;
 use App\Form\CategorieFormType;
 use App\Repository\ArticleRepository;
@@ -95,5 +96,132 @@ class AdminArticleController extends AbstractController
         }
 
         return $this->render('admin/admin_article/ajoutcategorie.html.twig', ['formulaireCateg' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/user/article/ajout", name="user_article_ajout")
+     */
+    public function ajoutArticle(EntityManagerInterface $em): Response
+    {
+        // $em = $this->getDoctrine()->getManager();
+
+        //  $currentUser = $this->getUser();
+        // dd($currentUser);
+        //echo("ajout article");
+
+        $u2 = new User();
+        $u2->setEmail('kitkat2@yahoo.fr');
+        $u2->setPassword('romeojuliette');
+        //$u1->setRoles(["ROLE_ADMIN"]);
+        $em->Persist($u2);
+
+        $a2 = new Article();
+        $a2->setTitre('casquette');
+        $a2->setDescription('casquette été');
+        $a2->setPrix(55);
+        $a2->setImage('casquette.png');
+        $a2->setActif(1);
+
+        // $a1->setUser($currentUser);
+
+        $a2->setUser($u2);
+
+        $em->Persist($a2);
+        $em->flush();
+
+        return new Response('article ajouté');
+    }
+
+    /**
+     * @Route("/user/articles/{id}", name="user_articles")
+     */
+    public function getArt(Article $article): Response
+    {
+        /*$em = $this->getDoctrine()->getManager();
+        $articles = $em->getRepository(Article::class)->findAll();
+        dd($articles);*/
+
+        /*find($id) --> pour id seulement*/
+
+        /*
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository(Article::class)->findOneBy(['slug' => $slug]);
+        dd($article);*/
+
+        /* parameter converter
+
+        dd($article);*/
+
+       // dd($article->getCategorie()[0]->getNom());
+        dd($article->getUser()->getEmail());
+
+        return new Response('Liste articles');
+    }
+
+    /**
+     * @Route("/user/articles_prix/{prix}", name="user_articles_prix")
+     */
+    public function getArtPrix($prix): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(Article::class);
+        //$articles = $repo->findArticlesByPriceLess($prix);
+        $articles = $repo->findArticlesByPriceGreat($prix);
+        dd($articles);
+
+        return new Response('Liste articles par prix');
+    }
+
+     /**
+     * @Route("/user/articles_search/{mot}", name="user_articles_search")
+     */
+    public function searchArticle($mot): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+       /* $repo = $em->getRepository(Article::class);
+        
+        $articles = $repo->filterArticleBy($mot);
+        dd($articles);
+        */
+
+        /*
+        $repo = $em->getRepository(Categorie::class);
+        $cat = $repo->findOneBy(['slug'=>$mot]);
+       // dd($cat);
+        $arts = $cat->getArticles();
+       // dd($articles);
+
+        foreach ($arts as $art) {
+          echo("<h1>".$art->getTitre()."</h1>");
+        }*/
+
+
+        return new Response('Liste articles par prix');
+    }
+
+     /**
+     * @Route("/userandarticles/{email}", name="user_and_articles")
+     */
+    public function UserAndArticles($email): Response
+    {
+        $mail = $email;
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(Article::class);
+        
+        $userarticles = $repo->findUserAndArticle($email);
+
+        //dd($userarticles);
+   /*
+        echo "<table class='table'>";
+        echo "<th>Vendeur</th><th>Nom article</th><th>Prix article</th><th>Date Mise en ligne</th>";
+        foreach ($userarticles as $userart) {
+
+        echo"<tr><td>".$userart['vendeur']."</td><td>".$userart['nom_article']."</td><td>".$userart['prix_article']."</td><td>".$userart['date_mise_en_ligne']."</td></tr>";
+         
+        }
+
+        echo "</table>";*/
+        
+        return $this->render('home/userarticles.html.twig', compact('userarticles','email'));
     }
 }
